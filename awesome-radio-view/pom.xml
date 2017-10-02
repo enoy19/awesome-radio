@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>awesome-radio</artifactId>
+		<groupId>org.enoy</groupId>
+		<version>1.0.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>awesome-radio-view</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.vaadin.spring.addons</groupId>
+			<artifactId>vaadin-spring-addon-eventbus</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-push</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.enoy</groupId>
+			<artifactId>awesome-radio-commons</artifactId>
+		</dependency>
+	</dependencies>
+
+
+</project>

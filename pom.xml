@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.enoy</groupId>
+	<artifactId>awesome-radio</artifactId>
+	<version>1.0.0</version>
+	<modules>
+		<module>awesome-radio-view</module>
+		<module>awesome-radio-boot</module>
+	</modules>
+
+	<packaging>pom</packaging>
+
+	<properties>
+		<spring-boot-dependencies.version>1.5.7.RELEASE</spring-boot-dependencies.version>
+		<vaadin.version>8.1.5</vaadin.version>
+		<vaadin-spring-addon-eventbus.version>2.0.0.RELEASE</vaadin-spring-addon-eventbus.version>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<version>${vaadin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-push</artifactId>
+				<version>${vaadin.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.enoy</groupId>
+				<artifactId>awesome-radio-commons</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.enoy</groupId>
+				<artifactId>awesome-radio-view</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.vaadin.spring.addons</groupId>
+				<artifactId>vaadin-spring-addon-eventbus</artifactId>
+				<version>${vaadin-spring-addon-eventbus.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
