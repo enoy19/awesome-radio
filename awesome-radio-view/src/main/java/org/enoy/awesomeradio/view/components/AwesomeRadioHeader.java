@@ -52,8 +52,6 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 
 		setExpandRatio(audio, 1);
 
-		playSong(songData.getCurrentSong(), songData.getCurrentSongResource());
-
 	}
 
 	@EventBusListenerMethod(scope = EventScope.APPLICATION)
@@ -83,6 +81,8 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 	public void attach() {
 		super.attach();
 		eventBus.subscribe(this);
+
+		playSong(songData.getCurrentSong(), songData.getCurrentSongResource());
 	}
 
 	@Override
