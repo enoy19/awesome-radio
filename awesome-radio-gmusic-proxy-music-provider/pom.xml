@@ -9,7 +9,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>awesome-radio-boot</artifactId>
+	<artifactId>awesome-radio-gmusic-proxy-music-provider</artifactId>
 
 	<dependencies>
 
@@ -19,13 +19,23 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.enoy</groupId>
 			<artifactId>awesome-radio-commons</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.enoy</groupId>
-			<artifactId>awesome-radio-view</artifactId>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mpatric</groupId>
+			<artifactId>mp3agic</artifactId>
 		</dependency>
 
 	</dependencies>
@@ -37,24 +47,6 @@
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
-
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<executable>true</executable>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
 	</build>
 
 </project>

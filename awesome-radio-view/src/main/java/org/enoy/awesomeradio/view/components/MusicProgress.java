@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 
 @SpringComponent
 @UIScope
+@Deprecated
 public class MusicProgress extends VerticalLayout {
 
 	@PostConstruct

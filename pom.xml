@@ -8,8 +8,10 @@
 	<artifactId>awesome-radio</artifactId>
 	<version>1.0.0</version>
 	<modules>
+		<module>awesome-radio-commons</module>
 		<module>awesome-radio-view</module>
 		<module>awesome-radio-boot</module>
+		<module>awesome-radio-gmusic-proxy-music-provider</module>
 	</modules>
 
 	<packaging>pom</packaging>
@@ -19,6 +21,8 @@
 		<vaadin.version>8.1.5</vaadin.version>
 		<vaadin-spring-addon-eventbus.version>2.0.0.RELEASE</vaadin-spring-addon-eventbus.version>
 		<java.version>1.8</java.version>
+		<jsoup.version>1.10.3</jsoup.version>
+		<mp3agic.version>0.9.0</mp3agic.version>
 	</properties>
 
 	<dependencyManagement>
@@ -58,9 +62,27 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.enoy</groupId>
+				<artifactId>awesome-radio-gmusic-proxy-music-provider</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.vaadin.spring.addons</groupId>
 				<artifactId>vaadin-spring-addon-eventbus</artifactId>
 				<version>${vaadin-spring-addon-eventbus.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jsoup</groupId>
+				<artifactId>jsoup</artifactId>
+				<version>${jsoup.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.mpatric</groupId>
+				<artifactId>mp3agic</artifactId>
+				<version>${mp3agic.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

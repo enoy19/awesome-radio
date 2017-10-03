@@ -12,5 +12,8 @@
 
 	<artifactId>awesome-radio-commons</artifactId>
 
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+	</build>
 
 </project>

@@ -2,23 +2,24 @@ package org.enoy.awesomeradio.view;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.VaadinSessionScope;
+import org.enoy.awesomeradio.user.AwesomeRadioUser;
 
 @SpringComponent
 @VaadinSessionScope
 public class SessionVars {
 
-	private String username;
+	private AwesomeRadioUser user;
 
-	public String getUsername() {
-		return username;
+	public AwesomeRadioUser getUser() {
+		return user;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUser(AwesomeRadioUser user) {
+		this.user = user;
 	}
 
 	public boolean isLoggedIn() {
-		return username != null && !username.trim().isEmpty();
+		return user != null;
 	}
 
 }

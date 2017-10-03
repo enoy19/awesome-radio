@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface MusicProvider {
 
-	List<MusicDescription> search(String querry);
+	List<MusicDescription> search(String query);
+
+	String getUrl(MusicDescription musicDescription);
 
 }

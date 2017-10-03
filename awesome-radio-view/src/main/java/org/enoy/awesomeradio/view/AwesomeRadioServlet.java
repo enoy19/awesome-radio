@@ -4,6 +4,8 @@ import com.vaadin.server.*;
 
 import javax.servlet.ServletException;
 
+
+// TODO
 // @SpringComponent
 public class AwesomeRadioServlet extends VaadinServlet
 		implements SessionInitListener, SessionDestroyListener {

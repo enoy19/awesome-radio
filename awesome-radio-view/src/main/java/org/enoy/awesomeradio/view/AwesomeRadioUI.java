@@ -1,5 +1,6 @@
 package org.enoy.awesomeradio.view;
 
+import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.Push;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -14,6 +15,7 @@ import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 
 @SpringUI
+@JavaScript("vaadin://js/awesome-radio.js")
 @Push
 public class AwesomeRadioUI extends UI {
 

@@ -41,6 +41,8 @@ public class SongSearch extends HorizontalLayout {
 		searchButton.addClickListener(e -> search(searchText.getValue()));
 
 		setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+		searchText.setWidth(100, Unit.PERCENTAGE);
+
 		addComponent(searchText);
 		addComponent(searchButton);
 

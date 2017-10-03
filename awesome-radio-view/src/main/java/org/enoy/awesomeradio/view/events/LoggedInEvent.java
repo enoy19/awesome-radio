@@ -1,17 +1,19 @@
 package org.enoy.awesomeradio.view.events;
 
+import org.enoy.awesomeradio.user.AwesomeRadioUser;
+
 import java.io.Serializable;
 
 public class LoggedInEvent implements Serializable {
 
-	private final String username;
+	private final AwesomeRadioUser user;
 
-	public LoggedInEvent(String username) {
-		this.username = username;
+	public LoggedInEvent(AwesomeRadioUser user) {
+		this.user = user;
 	}
 
-	public String getUsername() {
-		return username;
+	public AwesomeRadioUser getUser() {
+		return user;
 	}
 
 }

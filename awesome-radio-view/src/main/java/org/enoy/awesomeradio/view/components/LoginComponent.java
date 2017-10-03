@@ -7,6 +7,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import org.enoy.awesomeradio.user.AwesomeRadioUser;
 import org.enoy.awesomeradio.view.ApplicationData;
 import org.enoy.awesomeradio.view.SessionVars;
 import org.enoy.awesomeradio.view.events.LoggedInEvent;
@@ -54,15 +55,11 @@ public class LoginComponent extends VerticalLayout {
 	private void login(String name) {
 		name = name.trim();
 
-		boolean isFree = !applicationData.isUserLoggedIn(name);
+		AwesomeRadioUser user = applicationData.login(name);
 
-		if (isFree) {
-			boolean successful = applicationData.login(name);
-
-			if (successful) {
-				sessionVars.setUsername(name);
-				eventBus.publish(this, new LoggedInEvent(name));
-			}
+		if (user != null) {
+			sessionVars.setUser(user);
+			eventBus.publish(this, new LoggedInEvent(user));
 		}
 	}
 

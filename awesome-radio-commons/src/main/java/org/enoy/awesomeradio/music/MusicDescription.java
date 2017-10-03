@@ -6,9 +6,7 @@ public class MusicDescription implements Serializable {
 
 	private String uniqueIdentifier;
 	private String title;
-	private String album;
-	private String[] artists;
-	private String url;
+	private String artist;
 	private long length;
 
 	public String getUniqueIdentifier() {
@@ -27,28 +25,12 @@ public class MusicDescription implements Serializable {
 		this.title = title;
 	}
 
-	public String getAlbum() {
-		return album;
+	public String getArtist() {
+		return artist;
 	}
 
-	public void setAlbum(String album) {
-		this.album = album;
-	}
-
-	public String[] getArtists() {
-		return artists;
-	}
-
-	public void setArtists(String[] artists) {
-		this.artists = artists;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
+	public void setArtist(String artists) {
+		this.artist = artists;
 	}
 
 	public long getLength() {
@@ -57,5 +39,20 @@ public class MusicDescription implements Serializable {
 
 	public void setLength(long length) {
 		this.length = length;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		MusicDescription that = (MusicDescription) o;
+
+		return uniqueIdentifier.equals(that.uniqueIdentifier);
+	}
+
+	@Override
+	public int hashCode() {
+		return uniqueIdentifier.hashCode();
 	}
 }
