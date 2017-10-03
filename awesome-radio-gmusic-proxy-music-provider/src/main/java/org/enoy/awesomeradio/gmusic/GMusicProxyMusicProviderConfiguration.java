@@ -3,6 +3,7 @@ package org.enoy.awesomeradio.gmusic;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -10,6 +11,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 
 @Configuration
+@PropertySource("gmusic.properties")
 public class GMusicProxyMusicProviderConfiguration extends WebMvcConfigurerAdapter {
 
 	@Value("${awesomeradio.gmusic.proxy.url}")

@@ -5,6 +5,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.VerticalLayout;
 import org.enoy.awesomeradio.music.MusicDescription;
 import org.enoy.awesomeradio.music.MusicProvider;
+import org.enoy.awesomeradio.view.SessionVars;
 import org.enoy.awesomeradio.view.events.SearchEvent;
 import org.enoy.awesomeradio.view.events.SongAddedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import java.util.List;
 @SpringComponent
 @UIScope
 public class AwesomeRadioSongList extends VerticalLayout {
+
+	@Autowired
+	private SessionVars sessionVars;
 
 	@Autowired
 	private SongSearch songSearch;
@@ -49,7 +53,7 @@ public class AwesomeRadioSongList extends VerticalLayout {
 		setExpandRatio(musicGrid, 1);
 
 		musicGrid.addItemClickListener(e -> {
-			if (e.getMouseEventDetails().isDoubleClick()) {
+			if (sessionVars.isLoggedIn() && e.getMouseEventDetails().isDoubleClick()) {
 				addSongConfirm(e.getItem());
 			}
 		});

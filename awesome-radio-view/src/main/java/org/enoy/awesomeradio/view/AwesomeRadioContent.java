@@ -6,7 +6,6 @@ import com.vaadin.ui.VerticalLayout;
 import org.enoy.awesomeradio.view.components.AwesomeRadioBody;
 import org.enoy.awesomeradio.view.components.AwesomeRadioHeader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.events.EventBus.ApplicationEventBus;
 
 import javax.annotation.PostConstruct;
 
@@ -19,9 +18,6 @@ public class AwesomeRadioContent extends VerticalLayout {
 
 	@Autowired
 	private AwesomeRadioBody body;
-
-	@Autowired
-	private ApplicationEventBus eventBus;
 
 	@PostConstruct
 	private void init() {
