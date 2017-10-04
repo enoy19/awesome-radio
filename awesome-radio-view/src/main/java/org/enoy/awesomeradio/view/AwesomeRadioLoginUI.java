@@ -1,5 +1,6 @@
 package org.enoy.awesomeradio.view;
 
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
@@ -13,6 +14,7 @@ import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 
 @SpringUI(path = AwesomeRadioLoginUI.UI_PATH)
+@Theme("awesome-radio")
 public class AwesomeRadioLoginUI extends UI {
 
 	public static final String UI_PATH = "/";
@@ -26,12 +28,9 @@ public class AwesomeRadioLoginUI extends UI {
 	@Autowired
 	private UIEventBus eventBus;
 
-	private Window loginModal;
-
 	protected void init(VaadinRequest vaadinRequest) {
 		if (!sessionVars.isLoggedIn()) {
 			showLogin();
-			return;
 		} else {
 			sendToAwesomeRadio();
 		}
@@ -39,7 +38,7 @@ public class AwesomeRadioLoginUI extends UI {
 
 	private void showLogin() {
 
-		loginModal = new Window("Login", new CenterWrapper(loginComponent));
+		Window loginModal = new Window("Login", new CenterWrapper(loginComponent));
 		loginModal.setClosable(false);
 		loginModal.setModal(true);
 		loginModal.center();

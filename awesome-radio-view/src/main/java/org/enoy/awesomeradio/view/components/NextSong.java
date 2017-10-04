@@ -38,6 +38,9 @@ public class NextSong extends VerticalLayout {
 
 		musicGrid.setSizeFull();
 
+		musicGrid.getColumn("artist").setSortable(false);
+		musicGrid.getColumn("title").setSortable(false);
+
 		addComponent(label);
 		addComponent(musicGrid);
 

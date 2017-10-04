@@ -1,0 +1,7 @@
+@import "addons.scss";
+@import "awesome-radio";
+
+.awesome-radio {
+  @include addons;
+  @include awesome-radio;
+}
