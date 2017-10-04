@@ -1,8 +1,11 @@
 package org.enoy.awesomeradio.view.components;
 
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import org.enoy.awesomeradio.music.MusicDescription;
 import org.enoy.awesomeradio.music.MusicProvider;
 import org.enoy.awesomeradio.view.SessionVars;
@@ -16,6 +19,7 @@ import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Objects;
 
 @SpringComponent
 @UIScope
@@ -47,14 +51,26 @@ public class AwesomeRadioSongList extends VerticalLayout {
 		songSearch.setWidth(100, Unit.PERCENTAGE);
 		musicGrid.setSizeFull();
 
+		Button addSongButton = new Button(VaadinIcons.ARROW_RIGHT);
+		addSongButton.setWidth(100, Unit.PERCENTAGE);
+		addSongButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
+
 		addComponent(songSearch);
 		addComponent(musicGrid);
+		addComponent(addSongButton);
 
 		setExpandRatio(musicGrid, 1);
 
 		musicGrid.addItemClickListener(e -> {
 			if (sessionVars.isLoggedIn() && e.getMouseEventDetails().isDoubleClick()) {
 				addSongConfirm(e.getItem());
+			}
+		});
+
+		addSongButton.addClickListener(e -> {
+			MusicDescription value = musicGrid.asSingleSelect().getValue();
+			if (Objects.nonNull(value)) {
+				addSongConfirm(value);
 			}
 		});
 
