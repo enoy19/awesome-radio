@@ -42,7 +42,7 @@ public class GMusicProvider implements MusicProvider {
 
 		String[][] result;
 		try {
-			result = proxyBridge.search(null, query);
+			result = proxyBridge.search(null, query, 30);
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 			return musicDescriptions;
