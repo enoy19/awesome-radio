@@ -4,9 +4,12 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
-public class CenterWrapper extends VerticalLayout {
+public class CenterWrapper<T extends Component> extends VerticalLayout {
 
-	public CenterWrapper(Component component) {
+	protected final T component;
+
+	public CenterWrapper(T component) {
+		this.component = component;
 		setSizeFull();
 		setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		addComponent(component);
