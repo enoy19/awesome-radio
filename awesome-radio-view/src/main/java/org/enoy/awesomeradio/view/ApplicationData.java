@@ -2,11 +2,16 @@ package org.enoy.awesomeradio.view;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import org.enoy.awesomeradio.user.AwesomeRadioUser;
-import org.enoy.awesomeradio.view.events.LoggedInEvent;
+import org.enoy.awesomeradio.view.events.LogoutEvent;
+import org.enoy.awesomeradio.view.events.UpdateUserGridEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.vaadin.spring.events.EventBus.ApplicationEventBus;
+import org.vaadin.spring.events.EventScope;
+import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,6 +30,11 @@ public class ApplicationData {
 		loggedInUsers = new HashSet<>();
 	}
 
+	@PostConstruct
+	private void init() {
+		eventBus.subscribe(this);
+	}
+
 	private boolean isUserLoggedIn(AwesomeRadioUser user) {
 		return loggedInUsers.contains(user);
 	}
@@ -36,13 +46,31 @@ public class ApplicationData {
 			return null;
 
 		loggedInUsers.add(user);
-		eventBus.publish(this, new LoggedInEvent(user));
+		updateUserGridEvent();
 
 		return user;
 	}
 
 	public Collection<AwesomeRadioUser> getLoggedInUsers() {
 		return Collections.unmodifiableCollection(loggedInUsers);
+	}
+
+	@EventBusListenerMethod(scope = EventScope.APPLICATION)
+	private void userLoggedOut(LogoutEvent event) {
+		synchronized (loggedInUsers) {
+			loggedInUsers.remove(event.getUser());
+		}
+
+		updateUserGridEvent();
+	}
+
+	private void updateUserGridEvent() {
+		eventBus.publish(this, new UpdateUserGridEvent());
+	}
+
+	@PreDestroy
+	private void destroy() {
+		eventBus.unsubscribe(this);
 	}
 
 }

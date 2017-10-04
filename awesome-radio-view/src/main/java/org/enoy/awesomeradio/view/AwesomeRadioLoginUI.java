@@ -12,8 +12,10 @@ import org.vaadin.spring.events.EventBus.UIEventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 
-@SpringUI
+@SpringUI(path = AwesomeRadioLoginUI.UI_PATH)
 public class AwesomeRadioLoginUI extends UI {
+
+	public static final String UI_PATH = "/";
 
 	@Autowired
 	private SessionVars sessionVars;

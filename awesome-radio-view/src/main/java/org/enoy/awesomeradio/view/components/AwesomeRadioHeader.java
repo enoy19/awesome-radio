@@ -3,14 +3,17 @@ package org.enoy.awesomeradio.view.components;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Resource;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.enoy.awesomeradio.music.MusicDescription;
 import org.enoy.awesomeradio.music.MusicUrl;
+import org.enoy.awesomeradio.view.AwesomeRadioLoginUI;
+import org.enoy.awesomeradio.view.SessionVars;
 import org.enoy.awesomeradio.view.SongData;
-import org.enoy.awesomeradio.view.UIVars;
+import org.enoy.awesomeradio.view.events.LogoutEvent;
 import org.enoy.awesomeradio.view.events.SongPlayEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus.ApplicationEventBus;
@@ -35,7 +38,7 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 	private SongData songData;
 
 	@Autowired
-	private UIVars uiVars;
+	private SessionVars sessionVars;
 
 	private Audio audio;
 
@@ -54,12 +57,28 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 		synchronizeButton.addStyleName(ValoTheme.BUTTON_SMALL);
 		synchronizeButton.addClickListener(e -> synchronizeAudio());
 
+		Button logout = new Button(VaadinIcons.SIGN_OUT);
+		logout.setDescription("Logout");
+		logout.addStyleName(ValoTheme.BUTTON_TINY);
+		logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+		logout.addClickListener(e -> logout());
+
 		setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 		addComponent(synchronizeButton);
 		addComponent(audio);
 
+		if (sessionVars.isLoggedIn())
+			addComponent(logout);
+
 		setExpandRatio(audio, 1);
 
+	}
+
+	private void logout() {
+		eventBus.publish(this, new LogoutEvent(sessionVars.getUser()));
+
+		VaadinSession.getCurrent().close();
+		getUI().getPage().setLocation(AwesomeRadioLoginUI.UI_PATH);
 	}
 
 	@EventBusListenerMethod(scope = EventScope.APPLICATION)

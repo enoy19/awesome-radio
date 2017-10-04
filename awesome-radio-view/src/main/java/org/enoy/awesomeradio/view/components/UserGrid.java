@@ -4,7 +4,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Grid;
 import org.enoy.awesomeradio.user.AwesomeRadioUser;
 import org.enoy.awesomeradio.view.ApplicationData;
-import org.enoy.awesomeradio.view.events.LoggedInEvent;
+import org.enoy.awesomeradio.view.events.UpdateUserGridEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.vaadin.spring.events.EventBus.ApplicationEventBus;
@@ -39,7 +39,7 @@ public class UserGrid extends Grid<AwesomeRadioUser> {
 	}
 
 	@EventBusListenerMethod(scope = EventScope.APPLICATION)
-	private void logInEvent(LoggedInEvent event) {
+	private void updateUserGrid(UpdateUserGridEvent event) {
 		getUI().access(this::refresh);
 	}
 
