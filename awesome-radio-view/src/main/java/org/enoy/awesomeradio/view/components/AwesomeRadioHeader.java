@@ -1,13 +1,16 @@
 package org.enoy.awesomeradio.view.components;
 
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Resource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.enoy.awesomeradio.music.MusicDescription;
+import org.enoy.awesomeradio.music.MusicUrl;
 import org.enoy.awesomeradio.view.SongData;
+import org.enoy.awesomeradio.view.UIVars;
 import org.enoy.awesomeradio.view.events.SongPlayEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.events.EventBus.ApplicationEventBus;
@@ -23,11 +26,16 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 
 	public static final String AWESOME_RADIO_AUDIO_ID = "awesome-radio-audio";
 
+	private static final String LEADING_SLASHES_REGEX = "^\\/+";
+
 	@Autowired
 	private ApplicationEventBus eventBus;
 
 	@Autowired
 	private SongData songData;
+
+	@Autowired
+	private UIVars uiVars;
 
 	private Audio audio;
 
@@ -57,9 +65,23 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 	@EventBusListenerMethod(scope = EventScope.APPLICATION)
 	private void playSong(SongPlayEvent event) {
 		MusicDescription musicDescription = event.getMusicDescription();
-		Resource song = event.getSong();
 
-		getUI().access(() -> playSong(musicDescription, song));
+		Resource resource = getSongResource(event.getSongUrl());
+
+		getUI().access(() -> playSong(musicDescription, resource));
+	}
+
+	private Resource getSongResource(MusicUrl songUrl) {
+		if (Objects.nonNull(songUrl))
+			if (songUrl.isRelative()) {
+				String relativeSongUrl = songUrl.getUrl();
+				relativeSongUrl = relativeSongUrl.replaceAll(LEADING_SLASHES_REGEX, "");
+				return new ExternalResource(relativeSongUrl);
+			} else {
+				return new ExternalResource(songUrl.getUrl());
+			}
+
+		return null;
 	}
 
 	private void playSong(MusicDescription musicDescription, Resource song) {
@@ -82,7 +104,7 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 		super.attach();
 		eventBus.subscribe(this);
 
-		playSong(songData.getCurrentSong(), songData.getCurrentSongResource());
+		playSong(songData.getCurrentSong(), getSongResource(songData.getCurrentSongUrl()));
 	}
 
 	@Override

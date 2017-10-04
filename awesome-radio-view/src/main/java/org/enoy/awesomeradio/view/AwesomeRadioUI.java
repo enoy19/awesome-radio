@@ -17,7 +17,11 @@ public class AwesomeRadioUI extends UI {
 	@Autowired
 	private AwesomeRadioContent content;
 
+	@Autowired
+	private UIVars uiVars;
+
 	protected void init(VaadinRequest vaadinRequest) {
+		uiVars.setVaadinRequest(vaadinRequest);
 		setContent(content);
 	}
 

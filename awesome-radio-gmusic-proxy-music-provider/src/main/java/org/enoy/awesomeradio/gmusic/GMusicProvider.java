@@ -6,6 +6,7 @@ import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import org.enoy.awesomeradio.music.MusicDescription;
 import org.enoy.awesomeradio.music.MusicProvider;
+import org.enoy.awesomeradio.music.MusicUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,14 +60,16 @@ public class GMusicProvider implements MusicProvider {
 	}
 
 	@Override
-	public String getUrl(MusicDescription musicDescription) {
+	public MusicUrl getUrl(MusicDescription musicDescription) {
 		try {
 			File downloaded = proxyBridge.download(musicDir, musicDescription.getUniqueIdentifier());
 
 			Mp3File mp3File = new Mp3File(downloaded);
 			musicDescription.setLength(mp3File.getLengthInMilliseconds());
 
-			return String.format("http://%s/%s", musicMapping, getEncodedUrlName(downloaded));
+			String url = String.format("/%s/%s", musicMapping, getEncodedUrlName(downloaded));
+
+			return new MusicUrl(url, true);
 		} catch (UnsupportedTagException | InvalidDataException | NotSupportedException | IOException e) {
 			throw new IllegalStateException(e);
 		}

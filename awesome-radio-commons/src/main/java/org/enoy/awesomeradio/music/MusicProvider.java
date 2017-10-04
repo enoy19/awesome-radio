@@ -6,6 +6,6 @@ public interface MusicProvider {
 
 	List<MusicDescription> search(String query);
 
-	String getUrl(MusicDescription musicDescription);
+	MusicUrl getUrl(MusicDescription musicDescription);
 
 }

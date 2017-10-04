@@ -1,8 +1,8 @@
 package org.enoy.awesomeradio.view;
 
-import com.vaadin.server.Resource;
 import com.vaadin.spring.annotation.SpringComponent;
 import org.enoy.awesomeradio.music.MusicDescription;
+import org.enoy.awesomeradio.music.MusicUrl;
 import org.enoy.awesomeradio.view.events.SongAddedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.annotation.ApplicationScope;
@@ -28,9 +28,9 @@ public class SongData {
 
 	private long startedCurrentSongAt;
 
-	private Resource currentSongResource;
-
 	private MusicDescription currentSong;
+
+	private MusicUrl currentSongUrl;
 
 	public SongData() {
 		nextSongs = new ArrayList<>();
@@ -69,14 +69,6 @@ public class SongData {
 		return Collections.unmodifiableCollection(nextSongs);
 	}
 
-	public Resource getCurrentSongResource() {
-		return currentSongResource;
-	}
-
-	public void setCurrentSongResource(Resource currentSongResource) {
-		this.currentSongResource = currentSongResource;
-	}
-
 	public long getStartedCurrentSongAt() {
 		return startedCurrentSongAt;
 	}
@@ -91,6 +83,14 @@ public class SongData {
 
 	public void setCurrentSong(MusicDescription currentSong) {
 		this.currentSong = currentSong;
+	}
+
+	public MusicUrl getCurrentSongUrl() {
+		return currentSongUrl;
+	}
+
+	public void setCurrentSongUrl(MusicUrl currentSongUrl) {
+		this.currentSongUrl = currentSongUrl;
 	}
 
 	@PreDestroy

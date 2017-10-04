@@ -1,8 +1,8 @@
 package org.enoy.awesomeradio.view;
 
-import com.vaadin.server.ExternalResource;
 import org.enoy.awesomeradio.music.MusicDescription;
 import org.enoy.awesomeradio.music.MusicProvider;
+import org.enoy.awesomeradio.music.MusicUrl;
 import org.enoy.awesomeradio.view.events.SongPlayEvent;
 import org.enoy.awesomeradio.view.events.SongsUpdatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,6 @@ import org.vaadin.spring.events.EventBus.ApplicationEventBus;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Objects;
 
 @Component
@@ -47,33 +45,20 @@ public class AwesomeDJ {
 		MusicDescription nextSong = songData.removeNextSong();
 
 		if (nextSong != null) {
-			String nextSongUrl = musicProvider.getUrl(nextSong);
-
-			ExternalResource resource = getResource(nextSongUrl);
-			setupNextSong(nextSong, resource);
-
+			MusicUrl nextSongUrl = musicProvider.getUrl(nextSong);
+			setupNextSong(nextSong, nextSongUrl);
 			eventBus.publish(this, new SongsUpdatedEvent());
 		}
 	}
 
-	private void setupNextSong(MusicDescription nextSong, ExternalResource resource) {
-		if (resource != null) {
+	private void setupNextSong(MusicDescription nextSong, MusicUrl nextSongUrl) {
+		if (nextSongUrl != null) {
 			songData.setCurrentSong(nextSong);
 			songData.setStartedCurrentSongAt(System.currentTimeMillis());
-			songData.setCurrentSongResource(resource);
+			songData.setCurrentSongUrl(nextSongUrl);
 
-			eventBus.publish(this, new SongPlayEvent(resource, nextSong));
+			eventBus.publish(this, new SongPlayEvent(nextSongUrl, nextSong));
 		}
-	}
-
-	private ExternalResource getResource(String nextSongUrl) {
-		try {
-			return new ExternalResource(new URL(nextSongUrl));
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 	private boolean isCurrentSongDone() {
