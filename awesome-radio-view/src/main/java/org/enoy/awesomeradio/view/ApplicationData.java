@@ -57,8 +57,13 @@ public class ApplicationData {
 
 	@EventBusListenerMethod(scope = EventScope.APPLICATION)
 	private void userLoggedOut(LogoutEvent event) {
+		AwesomeRadioUser user = event.getUser();
+		logout(user);
+	}
+
+	public void logout(AwesomeRadioUser user) {
 		synchronized (loggedInUsers) {
-			loggedInUsers.remove(event.getUser());
+			loggedInUsers.remove(user);
 		}
 
 		updateUserGridEvent();

@@ -22,4 +22,7 @@ public class SessionVars {
 		return user != null;
 	}
 
+	public void reset() {
+		setUser(null);
+	}
 }

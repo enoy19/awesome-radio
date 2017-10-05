@@ -5,8 +5,10 @@ import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.server.VaadinSession.State;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
+import org.enoy.awesomeradio.user.AwesomeRadioUser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI(path = AwesomeRadioUI.UI_PATH)
@@ -21,11 +23,22 @@ public class AwesomeRadioUI extends UI {
 	private AwesomeRadioContent content;
 
 	@Autowired
-	private UIVars uiVars;
+	private SessionVars sessionVars;
+
+	@Autowired
+	private ApplicationData applicationData;
 
 	protected void init(VaadinRequest vaadinRequest) {
-		VaadinSession.getCurrent().getSession().setMaxInactiveInterval(-1);
-		uiVars.setVaadinRequest(vaadinRequest);
+		addDetachListener(e -> {
+			if (VaadinSession.getCurrent().getState() == State.CLOSED
+					|| VaadinSession.getCurrent().getState() == State.CLOSING
+					|| VaadinSession.getCurrent().getUIs().size() == 0) {
+				AwesomeRadioUser user = sessionVars.getUser();
+				sessionVars.reset();
+				applicationData.logout(user);
+			}
+		});
+
 		setContent(content);
 	}
 
