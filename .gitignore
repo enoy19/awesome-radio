@@ -3,3 +3,4 @@ target/
 .idea/
 /music
 *.css
+/application.properties

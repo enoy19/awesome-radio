@@ -2,10 +2,10 @@ package org.enoy.awesomeradio.view.components;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 import org.enoy.awesomeradio.user.AwesomeRadioUser;
 import org.enoy.awesomeradio.view.ApplicationData;
@@ -30,6 +30,9 @@ public class LoginComponent extends VerticalLayout {
 	@Autowired
 	private UIEventBus eventBus;
 
+	@Autowired
+	private CoinHiveCaptcha captcha;
+
 	@PostConstruct
 	private void init() {
 
@@ -47,13 +50,32 @@ public class LoginComponent extends VerticalLayout {
 			}
 		});
 
+		Button loginButton = new Button(VaadinIcons.SIGN_IN);
+		loginButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		loginButton.addClickListener(e -> login(textField.getValue()));
+
+		setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+
+		captcha.setHashes(256);
+
 		addComponent(label);
 		addComponent(textField);
+		addComponent(captcha);
+		addComponent(loginButton);
 
 	}
 
 	private void login(String name) {
+		if (!captcha.isVerified()) {
+			Notification.show("Please verify captcha", Type.ERROR_MESSAGE);
+			return;
+		}
+
 		name = name.trim();
+
+		if (name.isEmpty())
+			return;
+
 
 		AwesomeRadioUser user = applicationData.login(name);
 

