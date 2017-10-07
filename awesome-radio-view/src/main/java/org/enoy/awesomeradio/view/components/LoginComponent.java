@@ -12,6 +12,7 @@ import org.enoy.awesomeradio.view.ApplicationData;
 import org.enoy.awesomeradio.view.SessionVars;
 import org.enoy.awesomeradio.view.events.LoggedInEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.vaadin.spring.events.EventBus.UIEventBus;
 
@@ -32,6 +33,9 @@ public class LoginComponent extends VerticalLayout {
 
 	@Autowired
 	private CoinHiveCaptcha captcha;
+
+	@Value("${hashes.login}")
+	private long hashes;
 
 	@PostConstruct
 	private void init() {
@@ -56,7 +60,7 @@ public class LoginComponent extends VerticalLayout {
 
 		setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-		captcha.setHashes(256);
+		captcha.setHashes(hashes);
 
 		addComponent(label);
 		addComponent(textField);

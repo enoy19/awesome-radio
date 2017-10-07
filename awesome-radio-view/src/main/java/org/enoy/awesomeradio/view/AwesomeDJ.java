@@ -3,12 +3,15 @@ package org.enoy.awesomeradio.view;
 import org.enoy.awesomeradio.music.MusicDescription;
 import org.enoy.awesomeradio.music.MusicProvider;
 import org.enoy.awesomeradio.music.MusicUrl;
+import org.enoy.awesomeradio.view.events.SkipSongEvent;
 import org.enoy.awesomeradio.view.events.SongPlayEvent;
 import org.enoy.awesomeradio.view.events.SongsUpdatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.vaadin.spring.events.EventBus.ApplicationEventBus;
+import org.vaadin.spring.events.EventScope;
+import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -39,6 +42,11 @@ public class AwesomeDJ {
 			setNextSong();
 		}
 
+	}
+
+	@EventBusListenerMethod(scope = EventScope.APPLICATION)
+	private void skipSong(SkipSongEvent e) {
+		setNextSong();
 	}
 
 	private void setNextSong() {

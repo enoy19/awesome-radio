@@ -14,8 +14,11 @@ import org.enoy.awesomeradio.view.AwesomeRadioLoginUI;
 import org.enoy.awesomeradio.view.SessionVars;
 import org.enoy.awesomeradio.view.SongData;
 import org.enoy.awesomeradio.view.events.LogoutEvent;
+import org.enoy.awesomeradio.view.events.SkipSongEvent;
 import org.enoy.awesomeradio.view.events.SongPlayEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.vaadin.spring.events.EventBus.ApplicationEventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
@@ -40,6 +43,12 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 	@Autowired
 	private SessionVars sessionVars;
 
+	@Autowired
+	private ApplicationContext context;
+
+	@Value("${hashes.skip.song}")
+	private long skipHashes;
+
 	private Audio audio;
 
 	@PostConstruct
@@ -63,15 +72,33 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 		logout.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		logout.addClickListener(e -> logout());
 
+		Button skipSong = new Button(VaadinIcons.FAST_FORWARD);
+		skipSong.setDescription("Skip Song");
+		skipSong.addStyleName(ValoTheme.BUTTON_DANGER);
+		skipSong.addClickListener(e -> skipSong());
+
 		setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 		addComponent(synchronizeButton);
 		addComponent(audio);
 
-		if (sessionVars.isLoggedIn())
+		if (sessionVars.isLoggedIn()) {
 			addComponent(logout);
+			addComponent(skipSong);
+		}
 
 		setExpandRatio(audio, 1);
 
+	}
+
+	private void skipSong() {
+		CaptchaDialog dialog = context.getBean(CaptchaDialog.class);
+
+		dialog.setTitle("Skip Song");
+		dialog.setContent("Please complete the captcha to skip the current Song.");
+		dialog.setHashes(skipHashes);
+		dialog.setOnDone(() -> eventBus.publish(this, new SkipSongEvent()));
+
+		getUI().addWindow(dialog);
 	}
 
 	private void logout() {

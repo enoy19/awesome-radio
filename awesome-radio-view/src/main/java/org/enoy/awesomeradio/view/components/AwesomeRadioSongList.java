@@ -12,6 +12,8 @@ import org.enoy.awesomeradio.view.SessionVars;
 import org.enoy.awesomeradio.view.events.SearchEvent;
 import org.enoy.awesomeradio.view.events.SongAddedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.vaadin.spring.events.EventBus.ApplicationEventBus;
 import org.vaadin.spring.events.EventBus.UIEventBus;
 import org.vaadin.spring.events.EventScope;
@@ -42,6 +44,12 @@ public class AwesomeRadioSongList extends VerticalLayout {
 
 	@Autowired
 	private MusicProvider musicProvider;
+
+	@Autowired
+	private ApplicationContext context;
+
+	@Value("${hashes.add.song}")
+	private long hashes;
 
 	@PostConstruct
 	private void init() {
@@ -77,15 +85,20 @@ public class AwesomeRadioSongList extends VerticalLayout {
 	}
 
 	private void addSongConfirm(MusicDescription item) {
-		String content = String.format("Are you sure that you want to add \"%s\" ?", item.getTitle());
-		ConfirmDialog confirmDialog = new ConfirmDialog("Add Song", content, result -> addSong(result, item));
+		String content = String.format("Please complete the captcha to add \"%s\"", item.getTitle());
 
-		getUI().addWindow(confirmDialog);
+		CaptchaDialog dialog = context.getBean(CaptchaDialog.class);
+
+		dialog.setTitle("Confirm add Song");
+		dialog.setHashes(hashes);
+		dialog.setContent(content);
+		dialog.setOnDone(() -> addSong(item));
+
+		getUI().addWindow(dialog);
 	}
 
-	private void addSong(boolean sure, MusicDescription item) {
-		if (sure)
-			applicationEventBus.publish(this, new SongAddedEvent(item));
+	private void addSong(MusicDescription item) {
+		applicationEventBus.publish(this, new SongAddedEvent(item));
 	}
 
 	@EventBusListenerMethod(scope = EventScope.UI)

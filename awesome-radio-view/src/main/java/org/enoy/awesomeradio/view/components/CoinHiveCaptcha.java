@@ -1,10 +1,12 @@
 package org.enoy.awesomeradio.view.components;
 
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.JavaScript;
+import org.enoy.awesomeradio.view.CoinHiveTokenChecker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.vaadin.spring.annotation.PrototypeScope;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -17,7 +19,7 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 @SpringComponent
-@UIScope
+@PrototypeScope
 public class CoinHiveCaptcha extends CustomLayout {
 
 	private static final String TEMPLATE_HTML = "coinhivecaptcha.html";
@@ -26,8 +28,16 @@ public class CoinHiveCaptcha extends CustomLayout {
 	@Value("${coinhive.key.public}")
 	private String coinHiveKey;
 
+	@Autowired
+	private CoinHiveTokenChecker coinHiveTokenChecker;
+
 	private String randomCallback = "captcha_" + R.nextLong();
 	private String token;
+	private long hashes;
+
+	private boolean valid;
+
+	private Runnable onDone;
 
 	@PostConstruct
 	private void init() {
@@ -49,6 +59,8 @@ public class CoinHiveCaptcha extends CustomLayout {
 		if (hashes % 256 != 0)
 			throw new IllegalArgumentException("hashed must be multiple of 256");
 
+		this.hashes = hashes;
+
 		String contents = getTemplateContents();
 		contents = contents.replace("%hashes%", Long.toString(hashes));
 		setTemplateContents(contents);
@@ -60,10 +72,31 @@ public class CoinHiveCaptcha extends CustomLayout {
 		JavaScript.getCurrent().execute("CoinHive.Captcha.CreateElements()");
 		JavaScript.getCurrent().addFunction(randomCallback, args -> {
 			token = args.getString(0);
+			if (onDone != null)
+				onDone.run();
 		});
+
+		setWidthUndefined();
 	}
 
 	public boolean isVerified() {
-		return token != null;
+		if (valid)
+			return true;
+
+		if (token != null) {
+			boolean checkedValid = coinHiveTokenChecker.isTokenValid(token, hashes);
+
+			if (checkedValid) {
+				this.valid = true;
+				return true;
+			}
+		}
+
+		return false;
 	}
+
+	public void setOnDone(Runnable onDone) {
+		this.onDone = onDone;
+	}
+
 }
