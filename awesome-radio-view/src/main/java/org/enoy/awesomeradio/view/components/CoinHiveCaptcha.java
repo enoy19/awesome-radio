@@ -3,6 +3,7 @@ package org.enoy.awesomeradio.view.components;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.JavaScript;
+import org.apache.commons.io.IOUtils;
 import org.enoy.awesomeradio.view.CoinHiveTokenChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,12 +11,7 @@ import org.vaadin.spring.annotation.PrototypeScope;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Random;
 
 @SpringComponent
@@ -31,7 +27,7 @@ public class CoinHiveCaptcha extends CustomLayout {
 	@Autowired
 	private CoinHiveTokenChecker coinHiveTokenChecker;
 
-	private String randomCallback = "captcha_" + R.nextLong();
+	private String randomCallback = "captcha_" + Math.abs(R.nextLong());
 	private String token;
 	private long hashes;
 
@@ -42,15 +38,13 @@ public class CoinHiveCaptcha extends CustomLayout {
 	@PostConstruct
 	private void init() {
 		try {
-			URI uri = getClass().getResource(TEMPLATE_HTML).toURI();
-			Path path = Paths.get(uri);
-			String text = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+			String text = new String(IOUtils.toByteArray(getClass().getResourceAsStream(TEMPLATE_HTML)), StandardCharsets.UTF_8);
 
 			text = text.replace("%callback%", randomCallback)
 					.replace("%key%", coinHiveKey);
 
 			setTemplateContents(text);
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
 	}
