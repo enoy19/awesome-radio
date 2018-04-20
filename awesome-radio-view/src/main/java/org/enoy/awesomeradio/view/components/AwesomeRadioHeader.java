@@ -46,6 +46,9 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 	@Autowired
 	private ApplicationContext context;
 
+	@Autowired
+	private CaptchaDialogService captchaDialogService;
+
 	@Value("${hashes.skip.song}")
 	private long skipHashes;
 
@@ -91,14 +94,11 @@ public class AwesomeRadioHeader extends HorizontalLayout {
 	}
 
 	private void skipSong() {
-		CaptchaDialog dialog = context.getBean(CaptchaDialog.class);
+		final String title = "Skip Song";
+		final String content = "Please complete the captcha to skip the current Song.";
+		final Runnable onDone = () -> eventBus.publish(this, new SkipSongEvent());
 
-		dialog.setTitle("Skip Song");
-		dialog.setContent("Please complete the captcha to skip the current Song.");
-		dialog.setHashes(skipHashes);
-		dialog.setOnDone(() -> eventBus.publish(this, new SkipSongEvent()));
-
-		getUI().addWindow(dialog);
+		captchaDialogService.showCaptchaDialogIfCoinHiveActive(getUI(), title, content, skipHashes, onDone);
 	}
 
 	private void logout() {

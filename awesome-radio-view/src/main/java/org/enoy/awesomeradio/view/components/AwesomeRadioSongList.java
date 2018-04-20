@@ -48,6 +48,9 @@ public class AwesomeRadioSongList extends VerticalLayout {
 	@Autowired
 	private ApplicationContext context;
 
+	@Autowired
+	private CaptchaDialogService captchaDialogService;
+
 	@Value("${hashes.add.song}")
 	private long hashes;
 
@@ -85,16 +88,11 @@ public class AwesomeRadioSongList extends VerticalLayout {
 	}
 
 	private void addSongConfirm(MusicDescription item) {
-		String content = String.format("Please complete the captcha to add \"%s\"", item.getTitle());
+		final String content = String.format("Please complete the captcha to add \"%s\"", item.getTitle());
+		final String title = "Confirm add Song";
+		final Runnable onDone = () -> addSong(item);
 
-		CaptchaDialog dialog = context.getBean(CaptchaDialog.class);
-
-		dialog.setTitle("Confirm add Song");
-		dialog.setHashes(hashes);
-		dialog.setContent(content);
-		dialog.setOnDone(() -> addSong(item));
-
-		getUI().addWindow(dialog);
+		captchaDialogService.showCaptchaDialogIfCoinHiveActive(getUI(), title, content, hashes, onDone);
 	}
 
 	private void addSong(MusicDescription item) {
